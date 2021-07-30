@@ -1,0 +1,352 @@
+<html>
+<head>
+
+    <style>
+        .s{
+            width: 150px;
+            height: 125px;
+            font-size: 2rem;
+            margin: 10px;
+        }
+
+        .ser{
+            width: 400px;
+            height: 125px;
+            font-size: 2rem;
+            margin: 10px;
+        }
+    </style>
+
+        
+</head>
+<body onLoad="life()" onUnload="remGen()" style="background-color: grey;" >
+    <canvas id="grid" width="1000" height="1000" style="background-color: grey;"></canvas>
+    
+    <br>
+    <button onclick="myGen()" class="s">Generate</button>
+    <input type="text" id="search" class="ser" placeholder="Enter cell name"/>
+    <button id="searchBtn" class="s">Search Button</button>
+    <h1 id="result">Status of cell</h1>
+    <h2>Instructions:</h2>
+    <h3>Click on each cell to add a name to the cell.</h3>
+    <h3>Click the generate button to get the next generation(tick).</h3>
+    <h3>Use the search bar and search button to check the status(Alive/Dead) of the cell</h3>
+    
+    <script>
+         
+        var myTime        
+  
+          let i =0;
+          let len = 10;
+          let X = 0;
+          let Y = 0;
+
+          var arr = new Array(len);
+          var names = new Array(len);
+
+          var s 
+          var searchBtn = document.getElementById("searchBtn");
+          var res = document.getElementById("result");
+
+          searchBtn.addEventListener("click",function(e){
+
+            var temp = 0;
+            s=document.getElementById("search").value
+
+            for(var x=0;x<len;x++){
+                for(var y=0;y<len;y++){
+                    
+                    if(names[x][y]===s){
+
+                        console.log('s is ');
+                        console.log(s);
+                        //console.log(arr[x][y])
+                        if(arr[x][y]==1){
+                            temp = "Alive";
+                        }
+                        else{
+                            temp = "Dead";
+                        }
+                    }
+                }
+            }
+              res.innerHTML = temp
+          });
+         // var newArr = new Array(len);
+  
+          var c = document.getElementById("grid")
+          c.addEventListener("mousedown", function(e)
+        {
+            getMousePosition(c, e);
+        })
+          var ctx = c.getContext("2d")
+  
+          for(var p = 0;p<len;p++){
+              arr[p] = new Array(len);
+         //     newArr[p] = new Array(len);
+          }
+
+          for(var k=0;k<len;k++){
+              names[k] = new Array(len);
+          }
+
+          for(var m=0;m<len;m++){
+              for(var n=0;n<len;n++){
+                  names[m][n] = "";
+              }
+          }
+
+          var a=0,b=0
+          
+          function getMousePosition(canvas, event) {
+          //  let rect = canvas.getBoundingClientRect();
+          X=event.clientX
+           Y=event.clientY
+        //   alert(Y)
+       // i=parseInt(X)/parseInt(100)
+        if(X>100){
+        i1= parseInt(X)%parseInt(100)
+         i2=parseInt(X)-parseInt(i1)
+         i=i2/100
+          }
+          else{
+              i2=10
+              i=0
+          }
+           
+          if(Y>100){
+        j1= parseInt(Y)%parseInt(100)
+        //alert(Y+"   "+j1)
+         j2=parseInt(Y)-parseInt(j1)
+         j=j2/100 
+          }
+          else{
+              j2=10
+              j=0
+          }
+          //alert("Y is"+Y+"   "+j1+" "+j2)
+         //alert("X is"+X+"  "+i1+" "+i2)
+               //j=parseInt(len=i)
+         
+        
+       //  alert(i+"  "+j)
+         //j=parseInt(len=i)
+          //alert("new"+i2)     
+        //  j=parseInt(parseInt(Y)/parseInt(100))
+           //j=parseInt(len=i)
+         // alert("new"+j)        
+           
+           //Y= event.clientX - rect.top;
+           //X= event.clientY - rect.left;
+         //  alert(X+"    "+Y) 
+            //Y = Math.ceil(Y/100)-1;
+         // X = Math.ceil(X/100)-1;
+            //alert(X)
+       // alert(Y)
+            var name = window.prompt('Enter name for cell');
+            names[i][j] = name;
+       //alert(names[i][j])         
+           //  alert(name)
+            //console.table(names);
+            ctx.font = "25px Arial";
+            ctx.fillStyle = "#ff0000";
+            
+           
+           //  names[X][T]=name
+             //console.log(Y);
+
+            // console.table(names)
+            
+                      
+          //alert(i2+"    "+j2+"  "+name)
+          
+            ctx.fillText(names[i][j],i2+50,j2+50)
+             ctx.stroke()      
+
+            
+        }
+
+        function refresh(){
+            for(var i=0;i<len;i++){
+        for(var j =0;j<len;j++){
+
+            if(arr[i][j]==1){
+                if(i==0 || j==0 || i==len-1 || j==len-1){
+                    ctx.fillStyle = "#FFFFFF";
+                    ctx.fillRect(i*100, j*100, 100, 100);
+                ctx.stroke();
+                }
+                else{
+      
+
+                ctx.fillStyle = "#000000";
+                ctx.fillRect(i*100, j*100, 100, 100);
+                ctx.stroke();
+                }
+            }
+            else{
+                ctx.fillStyle = "#FFFFFF";
+                ctx.fillRect(i*100, j*100, 100, 100);
+                ctx.stroke();
+            }
+
+            ctx.font = "30px Arial";
+            ctx.fillStyle = "#ff0000";
+
+            ctx.fillText(names[i][j],i*100,100+50);
+
+        }
+    }
+        }
+  
+
+          function life(){
+              
+            while(i<500){
+  
+              ctx.moveTo(0, i*100);
+          ctx.lineTo(len*100, i*100);
+          ctx.stroke();
+  
+          ctx.moveTo(i*100, 0);
+          ctx.lineTo(i*100, len*100);
+              i+=1
+          }
+          for(var p = 0;p<len;p++){
+              arr[p] = new Array(len);
+             // newArr[p] = new Array(len);
+          }
+  
+          var a=0,b=0
+          for(a=0;a<len;a++){
+              for( b=0;b<len;b++){
+                  if(a==0 || b==0 || a==len-1 || b==len-1){
+                      arr[a][b] = 0
+                      ctx.fillStyle= "#FFFFFF";
+                       ctx.fillRect(a*100, b*100, 100, 100);
+                       ctx.stroke();
+                  }
+                  else{
+                      arr[a][b] = Math.round(Math.random())
+                      if(arr[a][b]==1){
+                    
+                       ctx.fillRect(a*100, b*100, 100, 100);
+                       ctx.stroke();
+                   }
+
+
+                   else{
+                    ctx.fillStyle= "#FFFFFF";
+                       ctx.fillRect(a*100, b*100, 100, 100);
+                       ctx.stroke();
+                   }
+                  }
+                  
+  
+                  
+                   
+                   
+                  
+              }
+        //      console.log(arr[a])     
+          }
+  
+        
+          
+         // alert(arr);
+           
+  
+      
+      }
+      function gen1(){
+        
+        var newArr = new Array(len);
+        for(var p = 0;p<len;p++){
+             
+              newArr[p] = new Array(len);
+          }
+        for (let x = 1; x < len - 1; x++) {
+            for (let y = 1; y < len - 1; y++) {
+        
+                
+                let neighbors =0
+                for (let i = -1; i <= 1; i++) {
+                    for (let j = -1; j <= 1; j++) {
+                        neighbors += arr[x+i][y+j]
+                        }
+                    }
+       
+      // console.log(arr[x][y])
+      
+      neighbors -= arr[x][y]
+        if      ((arr[x][y] == 1) && (neighbors <  2)) newArr[x][y] = 0           
+      else if ((arr[x][y] == 1) && (neighbors >  3)) newArr[x][y] = 0           
+      else if ((arr[x][y] == 0) && (neighbors == 3)) newArr[x][y] = 1          
+      else newArr[x][y] = arr[x][y] 
+      
+      
+
+
+                }
+      
+      
+      }
+
+
+   
+        let temp = arr;
+  arr = newArr;
+    newArr = temp;
+
+    for(var i=0;i<len;i++){
+        for(var j =0;j<len;j++){
+
+            if(arr[i][j]==1){
+                if(i==0 || j==0 || i==len-1 || j==len-1){
+                    ctx.fillStyle = "#FFFFFF";
+                    ctx.fillRect(i*100, j*100, 100, 100);
+                ctx.stroke();
+                }
+                else{
+      
+
+                ctx.fillStyle = "#000000";
+                ctx.fillRect(i*100, j*100, 100, 100);
+                ctx.stroke();
+                }
+            }
+            else{
+                ctx.fillStyle = "#FFFFFF";
+                ctx.fillRect(i*100, j*100, 100, 100);
+                ctx.stroke();
+            }
+
+            ctx.font = "30px Arial";
+            ctx.fillStyle = "#ff0000";
+            //console.table(names);
+            ctx.fillText(names[i][j],i*100+25,j*100+50);
+
+
+        }
+    }
+
+    console.log(event.clientX);
+
+    }
+  function myGen()
+  {
+      gen1();
+  }    
+  function remGen()
+  {
+      clearInterval(myTime)
+  }
+      </script>
+  
+ 
+   
+    
+    
+    
+</body>
+</html>
